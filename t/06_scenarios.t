@@ -18,6 +18,13 @@ use JSON;
 use HTTP::Request::Common (); # qw/GET POST PUT DELETE/;
 
 my $warn = shift @ARGV;
+
+unless ($warn) {
+    ok (1, 'we do not perform any tests');
+    done_testing;
+    exit;
+}
+
 unless ($warn) {
     close STDERR;
     open (STDERR, ">/dev/null");
