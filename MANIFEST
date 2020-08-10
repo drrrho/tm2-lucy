@@ -1,5 +1,14 @@
 Build.PL
 Changes
 lib/TM2/Lucy.pm
+lib/TM2/ObjectAble/StringsViaLucy.pm
+ontologies/lucy.atm
 MANIFEST			This list of files
 README
+t/manifest.t
+t/01_hash_reversible.t
+t/04_templescript.t
+t/06_scenarios.t
+Makefile.PL
+META.yml
+META.json

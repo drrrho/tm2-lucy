@@ -1,0 +1,15 @@
+lucy isa ontology ~ http://templescript.org/ns/lucy#
+
+lucy:auto-optimize # after every STORE, STORE_SLICE the optimizer is invoked
+
+lucy:unique-tid  # whether at every STORE, STORE_SLICE uniqueness of tid is maintained
+
+lucy:root        # file system directory where the index sits
+
+lucy:auto-create # automatically create index when it does not exist
+
+lucy:expiry      # optional: time in secs to let values expire
+
+lucy:truncate    # clean out index at start
+
+lucy:auto-prune  # delete expired values
