@@ -38,7 +38,7 @@ if (DONE) {
     my $root = tempdir( CLEANUP => 1 );
 
     my %hash;
-    tie %hash, 'TM2::ObjectAble::StringsViaLucy', root => $root, create => 1;
+    tie %hash, 'TM2::ObjectAble::StringsViaLucy', 'lucy:root' => $root, 'lucy:auto-create' => 1;
     my $o = tied %hash;
     like ("$o", qr{TM2::ObjectAble::StringsViaLucy}, $AGENDA.'tiedness');
 
@@ -124,9 +124,9 @@ if (DONE) {
     my $root = tempdir( CLEANUP => 1 );
 
     my %hash;
-    tie %hash, 'TM2::ObjectAble::StringsViaLucy', root => $root, create => 1, expiry => 3;
+    tie %hash, 'TM2::ObjectAble::StringsViaLucy', 'lucy:root' => $root, 'lucy:auto-create' => 1, 'lucy:expiry' => TM2::Literal::Unit->new ('3 sec');
     my $o = tied %hash;
-    is ($o->{expiry}, 3, $AGENDA.'trivial option');
+    is ($o->{'lucy:expiry'}, 3, $AGENDA.'trivial option');
 
 #--
     $hash{'aaa'} = TM2::Literal->new ('aaa', 'urn:x-mime:text/query');
@@ -183,7 +183,7 @@ if (DONE) { # tm identifiers
     my $root = tempdir( CLEANUP => 1 );
 
     my %hash;
-    tie %hash, 'TM2::ObjectAble::StringsViaLucy', root => $root, create => 1;
+    tie %hash, 'TM2::ObjectAble::StringsViaLucy', 'lucy:root' => $root, 'lucy:auto-create' => 1;
     my $o = tied %hash;
 
     is ($hash{'tm:whatever'}, undef, 'index does not exist yet');

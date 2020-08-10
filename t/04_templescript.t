@@ -1,5 +1,6 @@
 use strict;
 use warnings;
+use utf8;
 
 use Test::More;
 use Test::Exception;
@@ -85,7 +86,7 @@ lucy:auto-create  : 1
 lucy:unique-tid   : 1 # at every STORE we look whether that tid is there and is to be deleted
 
 }.q{
-? isa ts:converter
+§ isa ts:converter
     ts:mimetype @ ts:input  : "text/plain"
     ts:mimetype @ ts:output : "text/query"
 return """
@@ -160,7 +161,7 @@ lucy:unique-tid  : 1 # at every STORE we look whether that tid is there and is t
 lucy:expiry      : "3.1 sec"
 
 }.q{
-? isa ts:converter
+§ isa ts:converter
     ts:mimetype @ ts:input  : "text/plain"
     ts:mimetype @ ts:output : "text/query"
 return """

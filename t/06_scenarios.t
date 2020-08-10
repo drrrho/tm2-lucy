@@ -1,5 +1,6 @@
 use strict;
 use warnings;
+use utf8;
 
 #use Devel::NYTProf;
 #DB::disable_profile();
@@ -93,14 +94,14 @@ lucy:unique-tid    : 1 # at every STORE we look whether that tid is there and is
 lucy:auto-optimize : 1 # at every STORE(_SLICE) we optimize
 
 }.q{
-? isa ts:converter
+§ isa ts:converter
     ts:mimetype @ ts:input  : "text/plain"
     ts:mimetype @ ts:output : "text/query"
 return """
    return TM2::Literal->new ($_[0]->[0], 'urn:x-mime:text/query');
 """ ^^ lang:perl !
 
-? isa ts:converter
+§ isa ts:converter
     ts:mimetype @ ts:input  : "http/uri"
     ts:mimetype @ ts:output : "application/json"
 return """
@@ -146,12 +147,12 @@ return
   -{
     mappy ~[templescript/map]~> => $_
     |><|
-    ( $user:q  <~[text/query]~ /// "no result")
+    ( $user:q  <~[text/query]~ ??? "no result")
    }-
 
 query-stream isa ts:stream
 return
-    <+ every 1 sec +>
+    <+ every 2 sec +>
 # |  ("AAA", "nice", "unnice", "rumsti") | zigzag
   |  ("AAA")
   | ( "{ resty = }search?q={$0}" ^^ xsd:anyURI )
@@ -162,7 +163,7 @@ indexing-stream isa ts:stream
 return
   -{ count | (1, re-index-full ~[templescript/query]~>) |->> ts:fusion (ts:forks) => $f
      ||><||
-        <+ every 15 secs +>
+        <+ every 20 secs +>
      |  @ $f
      |->> io:write2log
    }-
@@ -177,7 +178,7 @@ return
       |->> ts:hash2block
       | ( $1  ==> <~[text/query]~ $0 )
       | count |                                         ("=========================== indexing { $0 } done")|->> io:write2log
-    }-
+    }-| ->> io:write2log
 
 %cancel
 

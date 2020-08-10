@@ -175,7 +175,7 @@ sub _get_hits {
     eval {
 	$searcher = Lucy::Search::IndexSearcher->new(	index => $self->{'lucy:root'}	);
     }; if ($@) {
-	$TM2::log->warn ("index empty at ".$self->{root});
+	$TM2::log->warn ("index empty at ".$self->{'lucy:root'});
 #	$TM2::log->warn ($@);
 	return undef;
     }
