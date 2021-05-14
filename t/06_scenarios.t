@@ -137,7 +137,6 @@ return """
             }
         }
     }
-    use Test::More;
     $TM2::log->debug ("generated: ".scalar keys %h);
     return bless \%h, 'templescript/hash;mime=text/query';
 """ ^^ lang:perl !

@@ -32,12 +32,13 @@ sub TIEHASH  {
     $options{'lucy:truncate'}      //= 1;
     $options{'lucy:unique-tid'}    //= 1; # by default, we are doing it (slower, but safe)
     $options{'lucy:auto-optimize'} //= 1; # by default, we are doing it (slower, but safe)
+    $options{'lucy:num-wanted'}   //= 50; # by default, we are doing it (slower, but safe)
 
     $options{'lucy:expiry'}          = $options{'lucy:expiry'}->factor
 	if ref ($options{'lucy:expiry'}) eq 'TM2::Literal::Unit';
     # otherwise kept undef => infinite expiry
 
-    my $schema = Lucy::Plan::Schema->new;
+    my $schema   = Lucy::Plan::Schema->new;
     my $polyanalyzer = Lucy::Analysis::PolyAnalyzer->new(language => 'en');
     my $texttype = Lucy::Plan::FullTextType->new(analyzer => $polyanalyzer);
     my $timetype = Lucy::Plan::BlobType->new( stored => 1 );
@@ -90,7 +91,7 @@ sub STORE_SLICE {
     my $self  = shift;
     my $values = shift;
 
-#warn "STORE_SLICE : ".scalar keys %$values;
+#warn "STORE_SLICE (lucy): ".scalar keys %$values;
 #warn "STORE_SLICE".Dumper $values;
 #warn "STORE_SLICE ". scalar keys %$values;
 
@@ -190,10 +191,10 @@ sub _get_hits {
 	    );
 	$query = $qparser->parse($text);
     }
-#warn "trying to get hits";
+#warn "trying to get hits ".$self->{'lucy:num-wanted'};
     my $hits = $searcher->hits( query      => $query,
 				offset     => 0,
-				num_wanted => 100,
+				num_wanted => $self->{'lucy:num-wanted'},
            );
 #warn "nr hits for $field $text ".$hits->total_hits;  # get the hit count here
     return $hits;
