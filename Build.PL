@@ -12,12 +12,13 @@ my $debian = Module::Build->subclass(
     code => <<'SUBCLASS' );
 
 sub DEBVERSION {
-    return 1;
+    return 2;
 }
 
 sub ACTION_debian {
     my $self = shift;
 
+    $self->depends_on("dist");
     $self->depends_on("distdir");
 
     my $version = $self->dist_version;
@@ -33,8 +34,8 @@ sub ACTION_inject {
     my $version = $self->dist_version;
     my $debversion = $self->DEBVERSION;
     $self->do_system(qq{ scp libtm2-lucy-perl_${version}-${debversion}_all.deb packages.devc.at:packages/ } );
-    foreach (qw(squeeze wheezy jessie stretch) ) {
-        $self->do_system(qq{ ssh packages.devc.at reprepro -b /var/www/packages/data/dists/ includedeb $_ packages/libtm2-lucy-perl_${version}-${debversion}_all.deb });
+    foreach (qw(bullseye buster stretch) ) {
+        $self->do_system(qq{ ssh packages.devc.at -Y -t reprepro --ask-passphrase -b /var/www/packages/data/dists/ includedeb $_ packages/libtm2-lucy-perl_${version}-${debversion}_all.deb });
     }
 }
 SUBCLASS
